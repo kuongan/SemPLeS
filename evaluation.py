@@ -107,7 +107,9 @@ categories_coco = ['background',
 
 
 def do_python_eval(predict_folder, gt_folder, name_list, num_cls=21, input_type='png', threshold=1.0, printlog=False,
-                   out_crf=False, n_jobs=-1, img_dir=None, cam_type="cam", out_dir=None):
+                   out_crf=False, n_jobs=-1, img_dir=None, cam_type="cam", out_dir='semples3/voc/pseudo-mask-ms-crf'):
+    print(f"[DEBUG] do_python_eval: out_dir={out_dir}")  # Kiểm tra giá trị out_dir khi gọi hàm
+
     def compare(idx):
         name = name_list[idx]
         if input_type == 'png':
@@ -139,7 +141,9 @@ def do_python_eval(predict_folder, gt_folder, name_list, num_cls=21, input_type=
             predict = label_key[predict]
             if out_dir is not None:
                 predict_img = Image.fromarray(predict)
-                predict_img.save(os.path.join(out_dir, name + ".png"))
+                save_path = os.path.join(out_dir, name + ".png")
+                predict_img.save(save_path)
+
 
         gt_file = os.path.join(gt_folder, '%s.png' % name)
         gt = np.array(Image.open(gt_file))
@@ -293,7 +297,10 @@ if __name__ == '__main__':
     parser.add_argument('--cam-type', default="cam", type=str)
 
     args = parser.parse_args()
-
+    print("Parsed arguments:", args) 
+    print("args.out_dir", args.out_dir)# Debug để xem các giá trị truyền vào
+    if args.out_dir is not None:
+        Path(args.out_dir).mkdir(parents=True, exist_ok=True)
     if "voc12" in args.list:
         args.data_path = Path(args.data_path) / "voc12" if "voc12" not in args.data_path else args.data_path
         args.data_path = Path(args.data_path) / "VOCdevkit" / "VOC2012"
@@ -310,8 +317,6 @@ if __name__ == '__main__':
     name_list = df['filename'].values
     if args.t is not None:
         args.t = args.t / 100.0
-    if args.out_dir is not None:
-        Path(args.out_dir).mkdir(parents=True, exist_ok=True)
 
     if not args.curve:
         loglist = do_python_eval(args.predict_dir, args.gt_dir, name_list, args.num_classes, args.type, args.t,
