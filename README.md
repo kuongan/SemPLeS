@@ -116,11 +116,11 @@ Prepare the model checkpoints from [WeakTr](https://github.com/hustvl/WeakTr).
 
 Training (a)-(c)
 ```bash
-CUDA_VISIBLE_DEVICES=0 python main1.py --batch-size 64 --epochs 60 --reduction 8 --pool-type max --lr 0.000512 --data-set VOC12 --output_dir semples1/voc --resume WeakTr_results/WeakTr/checkpoint_best_mIoU.pth --num_workers 8 --img-ms-list voc12/train_id.txt --gt-dir SegmentationClass --cam-npy-dir semples1/voc/attn-patchrefine-npy --scales 1.0 --hypers 2.4
+CUDA_VISIBLE_DEVICES=0 python main1_beit.py --model beit3_base_wsss_patch16_224 --batch-size 2 --epochs 60 --reduction 8 --pool-type max --lr 0.000512 --data-set VOC12 --output_dir semples1/voc --finetune beit3_base_patch16_224.pth --num_workers 8 --img-ms-list voc12/train_id.txt --gt-dir SegmentationClass --cam-npy-dir semples1/voc/attn-patchrefine-npy --scales 1.0 --hypers 2.4
 
-CUDA_VISIBLE_DEVICES=0 python main2.py --batch-size 128 --epochs 60 --reduction 8 --pool-type max --lr 0.1 --data-set VOC12 --output_dir semples2/voc --resume semples1/voc/checkpoint_best_mIoU.pth --num_workers 8 --img-ms-list voc12/train_id.txt --gt-dir SegmentationClass --cam-npy-dir semples2/voc/attn-patchrefine-npy --scales 1.0 --hypers 0.02 --btp_length 30
+CUDA_VISIBLE_DEVICES=0 python main2_beit.py --model beit3_base_wsss_patch16_224 --batch-size 128 --epochs 60 --reduction 8 --pool-type max --lr 0.1 --data-set VOC12 --output_dir semples2/voc --resume semples1/voc/checkpoint_best_mIoU.pth --num_workers 8 --img-ms-list voc12/train_id.txt --gt-dir SegmentationClass --cam-npy-dir semples2/voc/attn-patchrefine-npy --scales 1.0 --hypers 0.02 --btp_length 30
 
-CUDA_VISIBLE_DEVICES=0 python main3.py --batch-size 64 --epochs 60 --reduction 8 --pool-type max --lr 0.000512 --data-set VOC12 --output_dir semples3/voc --resume WeakTr_results/WeakTr/checkpoint_best_mIoU.pth --num_workers 8 --img-ms-list voc12/train_id.txt --gt-dir SegmentationClass --cam-npy-dir semples3/voc/attn-patchrefine-npy --scales 1.0 --hypers 2.4 0.05 --btp_length 30 --btp_path semples2_0.02/voc/btp.pth
+CUDA_VISIBLE_DEVICES=0 python main3_beit.py --batch-size 64 --epochs 60 --reduction 8 --pool-type max --lr 0.000512 --data-set VOC12 --output_dir semples3/voc --resume semples1/voc/checkpoint_best_mIoU.pth --num_workers 8 --img-ms-list voc12/train_id.txt --gt-dir SegmentationClass --cam-npy-dir semples3/voc/attn-patchrefine-npy --scales 1.0 --hypers 2.4 0.05 --btp_length 30 --btp_path semples2_0.02/voc/btp.pth
 ```
 
 CAM Generation and Evaluation
